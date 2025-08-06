@@ -1,0 +1,96 @@
+#define BLYNK_PRINT Serial
+
+#include <WiFi.h>
+#include <BlynkSimpleEsp32.h>
+#include <Servo.h>
+
+// Your WiFi credentials
+char ssid[] = "YOUR_WIFI_SSID";
+char pass[] = "YOUR_WIFI_PASSWORD";
+
+// Your Blynk Auth Token
+char auth[] = "YOUR_BLYNK_AUTH_TOKEN";
+
+#define IN1 2
+#define IN2 4
+#define IN3 5
+#define IN4 18
+
+
+#define IN5 19
+#define IN6 21
+#define IN7 22
+#define IN8 23
+
+#define RELAY_PIN 13
+
+#define PIR_PIN 32
+#define ACOUSTIC_PIN 33
+
+#define SERVO1_PIN 25
+#define SERVO2_PIN 26
+
+Servo servo1, servo2;
+
+void setup() {
+  Serial.begin(115200);
+  Blynk.begin(auth, ssid, pass);
+
+ pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+  pinMode(IN5, OUTPUT); pinMode(IN6, OUTPUT);
+  pinMode(IN7, OUTPUT); pinMode(IN8, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+
+  pinMode(PIR_PIN, INPUT);
+  pinMode(ACOUSTIC_PIN, INPUT);
+
+  servo1.attach(SERVO1_PIN);
+  servo2.attach(SERVO2_PIN);
+  servo1.write(0);
+  servo2.write(0);
+}
+
+BLYNK_WRITE(V0) {
+  int val = param.asInt();
+  digitalWrite(IN1, val);
+  digitalWrite(IN2, !val);
+}
+
+BLYNK_WRITE(V1) {
+  int val = param.asInt();
+  digitalWrite(IN3, val);
+  digitalWrite(IN4, !val);
+}
+
+BLYNK_WRITE(V2) {
+  int val = param.asInt();
+  digitalWrite(IN5, val);
+  digitalWrite(IN6, !val);
+  digitalWrite(IN7, val);
+  digitalWrite(IN8, !val);
+}
+
+BLYNK_WRITE(V3) {
+  digitalWrite(RELAY_PIN, param.asInt());
+}
+
+BLYNK_WRITE(V4) {
+  int angle = param.asInt();
+  servo1.write(angle);
+}
+
+BLYNK_WRITE(V5) {
+  int angle = param.asInt();
+  servo2.write(angle);
+}
+
+void loop() {
+  Blynk.run();
+
+  int pirVal = digitalRead(PIR_PIN);
+  int soundVal = digitalRead(ACOUSTIC_PIN);
+
+  Blynk.virtualWrite(V6, pirVal);      // PIR to V6
+  Blynk.virtualWrite(V7, soundVal);    // Sound to V7
+}
