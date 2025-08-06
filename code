@@ -5,11 +5,11 @@
 #include <Servo.h>
 
 // Your WiFi credentials
-char ssid[] = "YOUR_WIFI_SSID";
-char pass[] = "YOUR_WIFI_PASSWORD";
+char ssid[] = "one pluse nord 2T 5G";
+char pass[] = "veena@1234";
 
 // Your Blynk Auth Token
-char auth[] = "YOUR_BLYNK_AUTH_TOKEN";
+char auth[] = "0BIouzca1IHAndeKwX7GrAgkXA1nyyPE";
 
 #define IN1 2
 #define IN2 4
